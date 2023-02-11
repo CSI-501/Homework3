@@ -12,7 +12,7 @@ program homework3
     
     ! Initialize values
     integer :: i, n
-    real :: Mu, Q = 0.0
+    real :: Mu, Muprev, Q, Sigma = 0.0
     real, allocatable :: A(:)
     ! Open the file reader
     open(unit=13, file='Numbers1.txt')
@@ -23,25 +23,31 @@ program homework3
     ! Allocate memory for the array
     allocate(A(n))
 
-    ! Add data from file to array
+    ! Follow our Scientific Formula for 
     do i=1,n
         read(13,*) A(i)
         if ( i < 2 ) then
             Mu = A(i)
         else if ( i >= 2) then
+            Muprev = Mu
             Mu = Mu + (A(i) - Mu) / float(i)
+            Q = Q + ((A(i) - Muprev)*(A(i) - Mu))
         end if
     enddo
-    Q = 0.0
+
+    Sigma = sqrt(Q/i)
 
     ! Print our values
     print*, 'The Average is: ', Mu
-    print*, 'The Standard Deviation is: ', Q
+    print*, 'The Standard Deviation is: ', Sigma
     
     ! Close the file reader
     close(13)
 
     ! Deallocate the memory used
     deallocate(A)
+
+    ! Print the final line
+    print*,('Done!')
 
 end program homework3
